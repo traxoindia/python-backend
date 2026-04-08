@@ -33,3 +33,9 @@ def home():
 from app.routes.company_routes import router as company_router
 
 app.include_router(company_router)
+
+# from app.models import branch
+
+from app.routes import branch_routes
+
+app.include_router(branch_routes.router)

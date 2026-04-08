@@ -181,3 +181,5 @@ def reset_password(data: ResetPasswordSchema):
     except Exception as e:
         print("ERROR:", str(e))
         raise HTTPException(status_code=500, detail="Internal Server Error")
+    
+    
