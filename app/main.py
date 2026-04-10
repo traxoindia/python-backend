@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from app.routes.auth_routes import router as auth_router
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
@@ -11,9 +12,7 @@ def home():
 from app.routes.company_routes import router as company_router
 
 app.include_router(company_router)
-from fastapi import FastAPI
-from app.routes.auth_routes import router as auth_router
-from fastapi.middleware.cors import CORSMiddleware
+
 
 app = FastAPI()
 
@@ -39,3 +38,5 @@ app.include_router(company_router)
 from app.routes import branch_routes
 
 app.include_router(branch_routes.router)
+from app.routes import department_routes
+app.include_router(department_routes.router)
