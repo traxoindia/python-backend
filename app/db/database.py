@@ -38,3 +38,5 @@ db = client[DB_NAME]
 # ✅ NEW COLLECTION
 users_collection = db["adminUsers"]
 company_collection = db["companies"]
+
+vendor_collection = db["vendors"]

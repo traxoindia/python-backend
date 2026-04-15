@@ -16,6 +16,7 @@ app.include_router(company_router)
 
 app = FastAPI()
 
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # 🔥 allow all (for development)
@@ -38,5 +39,11 @@ app.include_router(company_router)
 from app.routes import branch_routes
 
 app.include_router(branch_routes.router)
+
 from app.routes import department_routes
+
 app.include_router(department_routes.router)
+
+from app.routes import vendor_routes
+
+app.include_router(vendor_routes.router)
