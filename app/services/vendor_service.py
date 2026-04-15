@@ -35,3 +35,61 @@ def get_all_vendors():
     for v in vendors:
         v["_id"] = str(v["_id"])
     return vendors
+
+from datetime import datetime
+
+PENDING = "PENDING"
+APPROVED = "APPROVED"
+REJECTED = "REJECTED"
+
+
+def get_pending_vendors():
+    vendors = list(vendor_collection.find({"status": PENDING}))
+    for v in vendors:
+        v["_id"] = str(v["_id"])
+    return vendors
+
+
+def approve_vendor(vendor_id: str, admin_id: str = "admin"):
+    vendor = vendor_collection.find_one({"vendor_id": vendor_id})
+
+    if not vendor:
+        return {"error": "Vendor not found"}
+
+    if vendor["status"] == APPROVED:
+        return {"message": "Vendor already approved"}
+
+    if vendor["status"] == REJECTED:
+        return {"error": "Rejected vendor cannot be approved directly"}
+
+    vendor_collection.update_one(
+        {"vendor_id": vendor_id},
+        {"$set": {
+            "status": APPROVED,
+            "approved_at": datetime.utcnow(),
+            "approved_by": admin_id
+        }}
+    )
+
+    return {"message": "Vendor approved successfully"}
+
+def reject_vendor(vendor_id: str, reason: str = "Not specified", admin_id: str = "admin"):
+    vendor = vendor_collection.find_one({"vendor_id": vendor_id})
+
+    if not vendor:
+        return {"error": "Vendor not found"}
+
+    if vendor["status"] == REJECTED:
+        return {"message": "Vendor already rejected"}
+
+    vendor_collection.update_one(
+        {"vendor_id": vendor_id},
+        {"$set": {
+            "status": REJECTED,
+            "rejected_at": datetime.utcnow(),
+            "rejected_by": admin_id,
+            "rejection_reason": reason
+        }}
+    )
+
+    return {"message": "Vendor rejected successfully"}

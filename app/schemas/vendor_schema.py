@@ -47,3 +47,10 @@ class VendorResponse(VendorCreate):
     vendor_id: str
     status: str
     created_at: datetime
+
+from pydantic import BaseModel
+from typing import Optional
+
+
+class VendorRejectRequest(BaseModel):
+    reason: Optional[str] = "Not specified"    
