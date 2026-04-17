@@ -48,3 +48,39 @@ def login_user(data):
 # def register_user(data):
 #     users_collection.insert_one(data)
 #     return {"message": "User registered"}
+
+from app.db.database import db
+from app.core.hash import verify_password
+from app.core.security import create_access_token
+
+vendor_collection = db["vendors"]
+
+
+def vendor_login(email: str, password: str):
+    vendor = vendor_collection.find_one({
+        "contact_details.email": email
+    })
+
+    # ❌ email not found
+    if not vendor:
+        return {"error": "Invalid email or password"}
+
+    # ❌ not approved (IMPORTANT as per your workflow)
+    if vendor["status"] != "APPROVED":
+        return {"error": "Vendor not approved by admin"}
+
+    # ❌ wrong password
+    if not verify_password(password, vendor["password"]):
+        return {"error": "Invalid email or password"}
+
+    # ✅ create token
+    token = create_access_token({
+        "vendor_id": vendor["vendor_id"],
+        "role": "vendor"
+    })
+
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "vendor_id": vendor["vendor_id"]
+    }

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from app.schemas.vendor_schema import VendorCreate , VendorRejectRequest
-from app.services.vendor_service import create_vendor, get_all_vendors , approve_vendor , reject_vendor , get_pending_vendors
+from app.schemas.vendor_schema import VendorCreate , VendorRejectRequest ,VendorLogin
+from app.services.vendor_service import create_vendor, get_all_vendors , approve_vendor , reject_vendor , get_pending_vendors , login_vendor
 
 router = APIRouter(prefix="/vendors", tags=["Vendors"])
 
@@ -48,3 +48,8 @@ def reject(vendor_id: str, payload: VendorRejectRequest):
 
     return result
     return result
+
+
+@router.post("/vendor-login")
+def vendor_Login(data:VendorLogin):
+    return login_vendor(data)
