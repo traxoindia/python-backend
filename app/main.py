@@ -4,11 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.routes.company_routes import router as company_router
 from app.routes import branch_routes
 from app.routes import department_routes
-<<<<<<< HEAD
 from app.routes import vendor_routes 
-=======
-from app.routes import vendor_routes
->>>>>>> cf1e95fa24d23e9f57aa2b01117d00b183406c2e
 
 app = FastAPI()
 
@@ -34,12 +30,9 @@ from app.routes.auth_routes import router as auth_router
 
 app.include_router(auth_router)
 
-<<<<<<< HEAD
 from app.routes.procurement_routes import router as procurement_router
 app.include_router(procurement_router)
 
-=======
->>>>>>> cf1e95fa24d23e9f57aa2b01117d00b183406c2e
 @app.get("/")
 def home():
     return {"message": "Admin Backend Running"}
