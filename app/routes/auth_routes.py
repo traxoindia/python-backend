@@ -105,9 +105,6 @@
 #         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-
-
-
 from fastapi import APIRouter, HTTPException
 from app.schemas.auth_schema import RegisterSchema, LoginSchema
 from app.controllers.auth_controller import register_controller, login_controller
@@ -181,5 +178,4 @@ def reset_password(data: ResetPasswordSchema):
     except Exception as e:
         print("ERROR:", str(e))
         raise HTTPException(status_code=500, detail="Internal Server Error")
-    
     

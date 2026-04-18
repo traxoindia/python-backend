@@ -40,3 +40,4 @@ users_collection = db["adminUsers"]
 company_collection = db["companies"]
 
 vendor_collection = db["vendors"]
+procurement_collection = db["procurement"]

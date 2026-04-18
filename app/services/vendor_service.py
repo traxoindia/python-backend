@@ -1,6 +1,8 @@
 from datetime import datetime
+from app.utils.hash import verify_password
 from bson import ObjectId
 from app.db.database import db
+from app.utils.jwt import create_token
 
 vendor_collection = db["vendors"]
 
@@ -93,3 +95,35 @@ def reject_vendor(vendor_id: str, reason: str = "Not specified", admin_id: str =
     )
 
     return {"message": "Vendor rejected successfully"}
+
+def login_vendor(data):
+    # ✅ Find vendor using nested email
+    vendor = vendor_collection.find_one({
+        "contact_details.email": data.email
+    })
+
+    if not vendor:
+        return {"error": "Vendor not found"}
+
+    # ✅ Check approval status
+    if vendor.get("status") != "APPROVED":
+        return {"error": "Vendor not approved by admin"}
+
+  
+    if data.password != vendor['contact_details']['phone_number']:
+      return {"error": "Invalid password"}
+
+    # ✅ Create token
+    token = create_token({
+        "id": str(vendor["_id"]),
+        "email": vendor["contact_details"]["email"],
+        "vendor_id": vendor["vendor_id"]
+    })
+
+    # ✅ Response
+    return {
+        "token": token,
+        "vendor_id": vendor["vendor_id"],
+        "email": vendor["contact_details"]["email"],
+        "company_name": vendor["company_details"]["company_name"]
+    }

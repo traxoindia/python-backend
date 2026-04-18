@@ -54,3 +54,9 @@ from typing import Optional
 
 class VendorRejectRequest(BaseModel):
     reason: Optional[str] = "Not specified"    
+
+
+
+class VendorLogin(BaseModel):
+    email: str
+    password: str
