@@ -1,4 +1,6 @@
 from datetime import datetime
+
+from django.db import router
 from app.utils.hash import verify_password
 from bson import ObjectId
 from app.db.database import db
@@ -127,3 +129,18 @@ def login_vendor(data):
         "email": vendor["contact_details"]["email"],
         "company_name": vendor["company_details"]["company_name"]
     }
+from app.db.database import requirement_collection 
+def vendorSee_AllRequerments():
+    print("Hello from service")
+    
+    requi_cursor = requirement_collection.find()
+    requi_list = list(requi_cursor)
+
+    if not requi_list:
+        return {"error": "No requirements found"}
+
+    # Convert ObjectId to string
+    for item in requi_list:
+        item["_id"] = str(item["_id"])
+
+    return requi_list

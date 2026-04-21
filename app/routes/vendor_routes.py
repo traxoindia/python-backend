@@ -53,3 +53,8 @@ def reject(vendor_id: str, payload: VendorRejectRequest):
 @router.post("/vendor-login")
 def vendor_Login(data:VendorLogin):
     return login_vendor(data)
+
+from app.services.vendor_service import vendorSee_AllRequerments
+@router.get("/vendor-see-requirements")
+def vendorSee_Allrequirements():
+    return vendorSee_AllRequerments()
