@@ -14,13 +14,15 @@ def get_all_requirements():
     requirements = list(requirement_collection.find({"status": "open"}))
     
     for r in requirements:
-        r["_id"] = str(r["_id"])  # convert ObjectId
+        r["_name"] = str(r["_name"])  # convert ObjectId
     
     return requirements
 
-@router.get("/vendor/requirements")
-def get_requirements(category: str = None):
+@router.get("/vendor/requirem" \
+            "ents")
 
+
+def get_requirements(category: str = None):
     query = {"status": "open"}
     
     if category:
@@ -29,6 +31,6 @@ def get_requirements(category: str = None):
     requirements = list(requirement_collection.find(query))
     
     for r in requirements:
-        r["_id"] = str(r["_id"])
+        r["_name"] = str(r["_name"])
 
     return requirements
