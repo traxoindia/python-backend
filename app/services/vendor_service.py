@@ -1,10 +1,8 @@
 from datetime import datetime
-
-from django.db import router
 from app.utils.hash import verify_password
-from bson import ObjectId
 from app.db.database import db
 from app.utils.jwt import create_token
+
 
 vendor_collection = db["vendors"]
 
@@ -129,6 +127,9 @@ def login_vendor(data):
         "email": vendor["contact_details"]["email"],
         "company_name": vendor["company_details"]["company_name"]
     }
+
+
+
 from app.db.database import requirement_collection 
 def vendorSee_AllRequerments():
     print("Hello from service")
