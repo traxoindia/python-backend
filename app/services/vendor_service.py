@@ -145,3 +145,25 @@ def vendorSee_AllRequerments():
         item["_id"] = str(item["_id"])
 
     return requi_list
+
+
+
+# def vendorApprove_Requirement(requirement_id: str, vendor_id: str):
+#     requirement = requirement_collection.find_one({"_id": ObjectId(requirement_id)})
+
+#     if not requirement:
+#         return {"error": "Requirement not found"}
+
+#     if requirement["status"] != "open":
+#         return {"error": "Requirement is not open for approval"}
+
+#     # ✅ Add vendor ID to the list of approved vendors
+#     requirement_collection.update_one(
+#         {"_id": ObjectId(requirement_id)},
+#         {"$addToSet": {"ApproveVendor_ids": vendor_id}}
+#     )
+
+#     return {"message": "Requirement approved successfully by vendor"}
+
+
+

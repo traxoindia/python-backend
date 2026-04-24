@@ -1,19 +1,4 @@
-# from app.models.user_model import user_entity
-# from app.db.database import db
 
-# def get_user_by_email(email):
-#     return db.query(User).filter(User.email == email).first()
-
-# def get_user_by_token(token):
-#     return db.query(User).filter(User.reset_token == token).first()
-
-# def save_user(user_entity):
-#     db.commit()
-#     db.refresh(user_entity)
-
-
-
-# from django import db
 
 from app.models.user_model import user_entity
 from app.db.database import users_collection, company_collection

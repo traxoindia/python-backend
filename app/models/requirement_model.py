@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import List, Optional
 from datetime import datetime
 
 class Requirement(BaseModel):
@@ -7,6 +7,9 @@ class Requirement(BaseModel):
     description: str
     quantity: int
     category: str
-    company_name: str
+    company_Name: str
     status: str = "open"
     created_at: datetime = datetime.utcnow()
+
+    # ✅ New field (array of IDs)
+    ApproveVendor_ids: List[str] = []   # or Optional[List[str]] = None
