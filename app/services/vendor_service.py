@@ -2,6 +2,8 @@ from datetime import datetime
 from app.utils.hash import verify_password
 from app.db.database import db
 from app.utils.jwt import create_token
+from app.services.email_service import send_email
+from app.utils.vendor_Code_Creation import generate_vendor_code
 
 
 vendor_collection = db["vendors"]
@@ -23,6 +25,8 @@ def create_vendor(data: dict):
         "financial_details": data["financial_details"],
         "online_presence": data.get("online_presence"),
         "status": "PENDING",  # important for approval flow
+        "vendor_code":"",
+        "code_sent": False,
         "created_at": datetime.utcnow()
     }
 
@@ -96,8 +100,10 @@ def reject_vendor(vendor_id: str, reason: str = "Not specified", admin_id: str =
 
     return {"message": "Vendor rejected successfully"}
 
-def login_vendor(data):
-    # ✅ Find vendor using nested email
+
+
+
+async def login_vendor(data):
     vendor = vendor_collection.find_one({
         "contact_details.email": data.email
     })
@@ -105,13 +111,11 @@ def login_vendor(data):
     if not vendor:
         return {"error": "Vendor not found"}
 
-    # ✅ Check approval status
     if vendor.get("status") != "APPROVED":
         return {"error": "Vendor not approved by admin"}
 
-  
     if data.password != vendor['contact_details']['phone_number']:
-      return {"error": "Invalid password"}
+        return {"error": "Invalid password"}
 
     # ✅ Create token
     token = create_token({
@@ -120,14 +124,35 @@ def login_vendor(data):
         "vendor_id": vendor["vendor_id"]
     })
 
-    # ✅ Response
+    # ✅ SEND EMAIL ONLY ONCE
+    if not vendor.get("code_sent", False):
+        email = vendor["contact_details"]["email"]
+        # vendor_code = vendor.get("vendor_code", "TIAPL/SC/001")  # fallback
+
+        vendor_code = generate_vendor_code()
+
+        await send_email(
+            email,
+            vendor_code
+        )
+
+        # ✅ Update DB
+        vendor_collection.update_one(
+           {"_id": vendor["_id"]},
+           {
+              "$set": {
+                 "code_sent": True,
+                 "vendor_code": vendor_code   # ✅ store code here
+               }
+            }
+    )
+
     return {
         "token": token,
         "vendor_id": vendor["vendor_id"],
         "email": vendor["contact_details"]["email"],
         "company_name": vendor["company_details"]["company_name"]
     }
-
 
 
 from app.db.database import requirement_collection 
@@ -145,25 +170,4 @@ def vendorSee_AllRequerments():
         item["_id"] = str(item["_id"])
 
     return requi_list
-
-
-
-# def vendorApprove_Requirement(requirement_id: str, vendor_id: str):
-#     requirement = requirement_collection.find_one({"_id": ObjectId(requirement_id)})
-
-#     if not requirement:
-#         return {"error": "Requirement not found"}
-
-#     if requirement["status"] != "open":
-#         return {"error": "Requirement is not open for approval"}
-
-#     # ✅ Add vendor ID to the list of approved vendors
-#     requirement_collection.update_one(
-#         {"_id": ObjectId(requirement_id)},
-#         {"$addToSet": {"ApproveVendor_ids": vendor_id}}
-#     )
-
-#     return {"message": "Requirement approved successfully by vendor"}
-
-
 
