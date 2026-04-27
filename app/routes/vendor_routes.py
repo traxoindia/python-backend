@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, UploadFile, File, Form
 from app.schemas.vendor_schema import VendorCreate , VendorRejectRequest ,VendorLogin
 # from app.services.vendor_service import create_vendor, get_all_vendors , approve_vendor , reject_vendor , get_pending_vendors , login_vendor
 from app.services.vendor_service import (
@@ -11,13 +11,42 @@ from app.services.vendor_service import (
     vendorSee_AllRequerments
 )
 from app.utils.dependencies import get_current_user
+from typing import Optional
 
 router = APIRouter(prefix="/vendors", tags=["Vendors"])
 
 
+# @router.post("/register")
+# def register_vendor(vendor: VendorCreate):
+#     return create_vendor(vendor.dict())
+
+
 @router.post("/register")
-def register_vendor(vendor: VendorCreate):
-    return create_vendor(vendor.dict())
+async def register_vendor(
+    # JSON as string
+    legal_details: str = Form(...),
+    contact_details: str = Form(...),
+    bank_details: str = Form(...),
+    compliance: str = Form(...),
+
+    # Files
+    pan_card: UploadFile = File(...),
+    gst_certificate: UploadFile = File(...),
+    cancelled_cheque: UploadFile = File(...),
+    address_proof: UploadFile = File(...),
+    iso_certificate: Optional[UploadFile] = File(None)
+):
+    return await create_vendor(
+        legal_details,
+        contact_details,
+        bank_details,
+        compliance,
+        pan_card,
+        gst_certificate,
+        cancelled_cheque,
+        address_proof,
+        iso_certificate
+    )
 
 
 @router.get("/")
