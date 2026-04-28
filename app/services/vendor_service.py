@@ -291,7 +291,7 @@ async def login_vendor(data):
         return {"error": "Vendor not approved by admin"}
 
     # ✅ FIXED FIELD
-    if data.password != vendor['contact_details']['mobile_number']:
+    if data.password != vendor['contact_details']['phone_number']:
         return {"error": "Invalid password"}
 
     token = create_token({
@@ -318,7 +318,7 @@ async def login_vendor(data):
 
     return {
         "token": token,
-        "id":vendor["_id"],
+        "id": str(vendor["_id"]),   # ✅ FIX HERE
         "vendor_id": vendor["vendor_id"],
         "email": vendor["contact_details"]["email"],
         "company_name": vendor["legal_details"]["legal_entity_name"]  # ✅ FIXED
