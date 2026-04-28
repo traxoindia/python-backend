@@ -318,6 +318,7 @@ async def login_vendor(data):
 
     return {
         "token": token,
+        "id":vendor["_id"],
         "vendor_id": vendor["vendor_id"],
         "email": vendor["contact_details"]["email"],
         "company_name": vendor["legal_details"]["legal_entity_name"]  # ✅ FIXED
@@ -340,3 +341,6 @@ def vendorSee_AllRequerments():
 
     return requi_list
 
+
+def vendor_Add_Product():
+    print("Hello from service")

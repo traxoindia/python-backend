@@ -76,6 +76,7 @@ from app.routes import department_routes
 from app.routes.vendor_routes import router as vendor_router   # ✅ FIXED
 from app.routes.procurement_routes import router as procurement_router
 from app.api.requirement_routes import router as requirement_router
+from app.routes.product_routes import router as product_router
 
 app = FastAPI()
 
@@ -96,6 +97,7 @@ app.include_router(department_routes.router)
 app.include_router(vendor_router)   # ✅ FIXED
 app.include_router(procurement_router)
 app.include_router(requirement_router)
+app.include_router(product_router)
 
 @app.get("/")
 def home():

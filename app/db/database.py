@@ -43,3 +43,4 @@ vendor_collection = db["vendors"]
 procurement_collection = db["procurement"]
 
 requirement_collection = db["requirements"]
+product_collection = db["products"]
